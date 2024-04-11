@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: angular-shop
+  datasource:
+    url: jdbc:mysql://localhost:3306/hnguyen387_ang_shop?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: Qwerty123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format-sql: true
+    
+

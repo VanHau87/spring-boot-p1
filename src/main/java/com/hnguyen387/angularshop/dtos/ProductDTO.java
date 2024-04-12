@@ -1,6 +1,7 @@
 package com.hnguyen387.angularshop.dtos;
 
 import org.hibernate.sql.Update;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,6 +26,7 @@ public class ProductDTO {
 	@JsonProperty("category_id")
 	@NotNull(message = "Category Id must required")
 	private Integer catId;
+	private MultipartFile file;
 	public Integer getProId() {
 		return proId;
 	}
@@ -60,6 +62,12 @@ public class ProductDTO {
 	}
 	public void setCatId(Integer catId) {
 		this.catId = catId;
+	}
+	public MultipartFile getFile() {
+		return file;
+	}
+	public void setFile(MultipartFile file) {
+		this.file = file;
 	}
 	
 }

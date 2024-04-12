@@ -32,7 +32,7 @@ public class CategoryController {
 		return ResponseEntity.ok(String.format("Category page = %d, limit = %d ", page, limit));
 	}
 	@GetMapping("{catId}")
-	public ResponseEntity<String> getCat(@PathVariable Long catId) {
+	public ResponseEntity<String> getCatById(@PathVariable Long catId) {
 		return ResponseEntity.ok("Query category id: " + catId);
 	}
 	@PostMapping

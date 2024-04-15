@@ -13,14 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hnguyen387.angularshop.dtos.CategoryDTO;
-import com.hnguyen387.angularshop.dtos.OnCreate;
-import com.hnguyen387.angularshop.dtos.OnDelete;
-import com.hnguyen387.angularshop.dtos.OnUpdate;
-
-import jakarta.validation.Valid;
+import com.hnguyen387.angularshop.groups.OnCreate;
+import com.hnguyen387.angularshop.groups.OnDelete;
+import com.hnguyen387.angularshop.groups.OnUpdate;
 
 @RestController
-@RequestMapping("api/v1/categories")
+@RequestMapping("${api.prefix.v1}/categories")
 @Validated
 public class CategoryController {
 	
@@ -48,8 +46,9 @@ public class CategoryController {
 		return ResponseEntity.ok(String.format("Updated category id: %d", dto.getCatId()));
 	}
 	@DeleteMapping
-	@Validated(OnDelete.class)
-	public ResponseEntity<String> deleteCat(@Valid @RequestBody CategoryDTO dto) {
+	public ResponseEntity<String> deleteCat(
+			@Validated(OnDelete.class) 
+			@RequestBody CategoryDTO dto) {
 		return ResponseEntity.ok(String.format("Deleted category id: %d", dto.getCatId()));
 	}
 	

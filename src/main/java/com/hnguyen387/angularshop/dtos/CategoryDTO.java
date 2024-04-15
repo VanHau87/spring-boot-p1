@@ -1,5 +1,9 @@
 package com.hnguyen387.angularshop.dtos;
 
+import com.hnguyen387.angularshop.groups.OnCreate;
+import com.hnguyen387.angularshop.groups.OnDelete;
+import com.hnguyen387.angularshop.groups.OnUpdate;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

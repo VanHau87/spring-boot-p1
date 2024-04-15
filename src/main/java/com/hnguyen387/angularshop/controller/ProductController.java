@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -22,18 +23,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hnguyen387.angularshop.dtos.OnCreate;
 import com.hnguyen387.angularshop.dtos.ProductDTO;
+import com.hnguyen387.angularshop.groups.OnCreate;
 
-import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
 
 @RestController
-@RequestMapping("api/v1/products")
+@RequestMapping("${api.prefix.v1}/products")
 @Validated
 public class ProductController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
@@ -55,29 +54,36 @@ public class ProductController {
 	public ResponseEntity<String> createNewProduct(
 			@Validated({OnCreate.class, Default.class})
 			@ModelAttribute ProductDTO dto) {
-		MultipartFile file = dto.getFile();
-		if (file != null) {
-			if (file.getSize() > MAX_SIZE ) {
-			return ResponseEntity
-					.status(HttpStatus.PAYLOAD_TOO_LARGE)
-					.body(String.format("Maximum size is: %d", MAX_SIZE));
-			}
-			String type = file.getContentType();
-			if (type == null || !type.startsWith("image/")) {
-				return ResponseEntity
-						.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-						.body("File must be an image");
+		List<MultipartFile> files = dto.getFiles();
+		if (files != null) {
+			for (MultipartFile file : files) {
+				long fileSize = file.getSize();
+				if (fileSize == 0) {
+					continue;
+				}
+				if (fileSize > MAX_SIZE ) {
+					return ResponseEntity
+							.status(HttpStatus.PAYLOAD_TOO_LARGE)
+							.body(String.format("Maximum size is: %d", MAX_SIZE));
+				}
+				String type = file.getContentType();
+				if (type == null || !type.startsWith("image/")) {
+					return ResponseEntity
+							.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+							.body("File must be an image");
+				}
+				try {
+					storeFile(file);
+				} catch (IOException e) {
+					LOGGER.error(String.format("Failed to upload image: %s", e.getMessage()));
+					return ResponseEntity
+							.status(HttpStatus.INTERNAL_SERVER_ERROR)
+							.body(String.format("Failed to upload image: %s", e.getMessage()));
+				}
 			}
 		}
-		//store file and update thumbnail in DTO
-		try {
-			storeFile(file);
-		} catch (IOException e) {
-			LOGGER.error(String.format("Failed to upload image: %s", e.getMessage()));
-			return ResponseEntity
-					.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(String.format("Failed to upload image: %s", e.getMessage()));
-		}
+		
+		
 		return ResponseEntity.ok(String.format("Product: %s was created successfully.", dto.getName()));
 	}
 	

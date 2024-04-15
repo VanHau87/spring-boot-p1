@@ -1,9 +1,13 @@
 package com.hnguyen387.angularshop.dtos;
 
+import java.util.List;
+
 import org.hibernate.sql.Update;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hnguyen387.angularshop.groups.OnCreate;
+import com.hnguyen387.angularshop.groups.OnUpdate;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -26,7 +30,7 @@ public class ProductDTO {
 	@JsonProperty("category_id")
 	@NotNull(message = "Category Id must required")
 	private Integer catId;
-	private MultipartFile file;
+	private List<MultipartFile> files;
 	public Integer getProId() {
 		return proId;
 	}
@@ -63,11 +67,12 @@ public class ProductDTO {
 	public void setCatId(Integer catId) {
 		this.catId = catId;
 	}
-	public MultipartFile getFile() {
-		return file;
+	public List<MultipartFile> getFiles() {
+		return files;
 	}
-	public void setFile(MultipartFile file) {
-		this.file = file;
+	public void setFiles(List<MultipartFile> files) {
+		this.files = files;
 	}
+	
 	
 }

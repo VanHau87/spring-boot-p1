@@ -13,5 +13,7 @@ spring:
     properties:
       hibernate:
         format-sql: true
-    
+api:
+  prefix:
+    v1: api/v1 
 
